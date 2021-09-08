@@ -1,47 +1,36 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import { ToastContainer } from 'react-toastify';
 import './App.css';
 import Searchbar from './components/Searchbar';
 import ImageGallery from './components/ImageGallery';
 import Modal from './components/Modal';
 
-class App extends Component {
-  static propTypes = {};
+const App = () => {
+  const [query, setQuery] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [modalImage, setModalImage] = useState('');
 
-  state = {
-    query: '',
-    showModal: false,
-    modalImage: '',
+  const openModal = (modalImage) => {
+    setShowModal(true);
+    setModalImage(modalImage);
   };
-
-  openModal = (modalImage) => {
-    this.setState({
-      showModal: true,
-      modalImage,
-    })
-  }
   
-  closeModal = () => {
-    this.setState({ showModal: false })
+  const closeModal = () => {
+    setShowModal(false);
   };
 
-  getQuery = query => {
-    this.setState({ query });
+  const getQuery = query => {
+    setQuery(query);
   }
 
-  render() {
-    const { query, showModal, modalImage } = this.state;
-    return (
+  return (
       <div>
-        {showModal && <Modal modalImage={modalImage} onClose={this.closeModal} />}
-        <Searchbar onSubmit={this.getQuery} />
-        {/* <h1>Please enter something in input</h1> */}
-        <ImageGallery query={query} onClick={this.openModal} />
-        {/* <h1>{error.message}</h1> */}
+        {showModal && <Modal modalImage={modalImage} onClose={closeModal} />}
+        <Searchbar onSubmit={getQuery} />
+        <ImageGallery query={query} onClick={openModal} />
         <ToastContainer />
       </div>   
     )
-  }
 }
 
 export default App;
