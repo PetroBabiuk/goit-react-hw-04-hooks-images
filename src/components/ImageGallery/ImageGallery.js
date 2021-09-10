@@ -37,11 +37,11 @@ const ImageGallery = ({ query, onClick }) => {
                 setImages([...images.hits]);
                 setStatus('resolved');
                 setPages(images.totalHits / 12);
+                autoScroll();
             }).catch(error => {
                 setError(error);
                 setStatus('rejected');
             } );
-            autoScroll();
         }
     }, [query]);
 
@@ -49,15 +49,14 @@ const ImageGallery = ({ query, onClick }) => {
         
         if ( currentPage > 1 && query === searshQuery) {
             setStatus('another-pending');
-            picturesApi(query, currentPage)
-                .then(images => {
-                    setImages(prevImages => ([...prevImages, ...images.hits]));
-                    setStatus('resolved');
+            picturesApi(query, currentPage).then(images => {
+                setImages(prevImages => ([...prevImages, ...images.hits]));
+                setStatus('resolved');
+                autoScroll();
             }).catch(error => {
                 setError(error);
                 setStatus('rejected');
-            } );
-            autoScroll();
+            });
         }
     }, [currentPage, query, searshQuery]);
 
